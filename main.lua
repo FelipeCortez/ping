@@ -15,9 +15,9 @@ function intersect2(ax, bx, ay, by, cx, cy, r)
   ay = ay - cy;
   bx = bx - cx;
   by = by - cy;
-  a = ax^2 + ay^2 - r^2;
+  a = (bx - ax)^2 + (by - ay)^2;
   b = 2*(ax*(bx - ax) + ay*(by - ay));
-  c = (bx - ax)^2 + (by - ay)^2;
+  c = ax^2 + ay^2 - r^2;
   disc = b^2 - 4*a*c;
 
   if disc <= 0 then
