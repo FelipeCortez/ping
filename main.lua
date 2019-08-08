@@ -64,7 +64,20 @@ function love.draw()
     love.graphics.clear(0.5, 0, 0)
   end
 
-  love.graphics.circle("line", ballx, bally, 10)
-  love.graphics.line(150, 150, 200, 200)
+  for x=1,800,10 do
+    for y=1,800,10 do
+
+      if intersect2(linex1, linex2, liney1, liney2, x, y, ballr) then
+        love.graphics.setColor(1, 1, 1)
+      else
+        love.graphics.setColor(1, 0, 0)
+      end
+
+      love.graphics.circle("line", x, y, 3)
+    end
+  end
+
+  love.graphics.circle("line", ballx, bally, ballr)
+  love.graphics.line(linex1, liney1, linex2, liney2)
 end
 
