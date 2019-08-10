@@ -50,17 +50,23 @@ function love.load()
   liney2 = 300
 
   ballx = 200
-  bally = 150
+  bally = 100
   ballr = 10
+
+  ballvx = 5
+  ballvy = 50
 
   math.randomseed(os.clock()*100000000000)
 end
 
 function love.update(dt)
-  -- bally = bally + (dt * 30)
-  -- ballx, bally = love.mouse.getPosition()
+  ballx = ballx + (dt * ballvx)
+  bally = bally + (dt * ballvy)
 
-  linex2, liney2 = love.mouse.getPosition()
+  if intersect(linex1, linex2, liney1, liney2, ballx, bally, ballr) then
+    ballvx, ballvy = reflect(ballvx, ballvy, linex1, linex2, liney1, liney2)
+  end
+
 end
 
 function love.draw()
@@ -83,9 +89,6 @@ function love.draw()
     end
   end
 
-  vx = 0
-  vy = 60
-
   midpointx = (linex1 + linex2) / 2
   midpointy = (liney1 + liney2) / 2
   love.graphics.circle("line", ballx, bally, ballr)
@@ -98,11 +101,17 @@ function love.draw()
 
   -- velocity
   love.graphics.setColor(0, 1, 0)
-  love.graphics.line(midpointx, midpointy, midpointx + vx, midpointy + vy)
+  love.graphics.line(midpointx, midpointy, midpointx + ballvx, midpointy + ballvy)
 
   -- reflection
-  rx, ry = reflect(vx, vy, linex1, linex2, liney1, liney2)
+  rx, ry = reflect(ballvx, ballvy, linex1, linex2, liney1, liney2)
   love.graphics.setColor(0, 0, 1)
   love.graphics.line(midpointx, midpointy, midpointx + rx, midpointy + ry)
+
+  -- debugging
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.print(ballvx, 400, 400)
+  love.graphics.print(ballvy, 400, 430)
+  love.graphics.print(math.sqrt(ballvx ^ 2 + ballvy ^ 2), 400, 450)
 end
 
