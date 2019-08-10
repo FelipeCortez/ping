@@ -1,4 +1,5 @@
 function intersect(ax, bx, ay, by, cx, cy, r)
+  -- from https://math.stackexchange.com/a/275537/693949
   ax = ax - cx
   ay = ay - cy
   bx = bx - cx
@@ -43,25 +44,29 @@ function reflect(vx, vy, ax, bx, ay, by)
   return vx - p2x, vy - p2y
 end
 
-function love.load()
-  ww, wh, _ = love.window.getMode()
-
-  paddle_len = 50
+function init()
   paddle_midpoint_x = 150
   paddle_midpoint_y = 300
   paddle_rotation = 0
 
   ballx = paddle_midpoint_x
   bally = paddle_midpoint_y - 15
-  ballr = 5
 
   ballvx = 0
   ballvy = -100
+end
 
+function love.load()
+  ww, wh, _ = love.window.getMode()
+
+  paddle_len = 50
+  ballr = 5
   g = 150
 
   ground_y = 400
   ground_len = 400
+
+  init()
 end
 
 function love.update(dt)
@@ -74,7 +79,7 @@ function love.update(dt)
   dt = 2 * dt
 
   if love.keyboard.isDown("lshift") then
-    kvel = 150
+    kvel = 170
   end
 
   if love.keyboard.isDown("left") then
@@ -99,6 +104,10 @@ function love.update(dt)
 
   if love.keyboard.isDown("e") then
     paddle_rotation = paddle_rotation + (rvel * dt)
+  end
+
+  if love.keyboard.isDown("space") then
+    init()
   end
 
   ballx = ballx + (dt * ballvx)
@@ -156,7 +165,7 @@ function love.draw()
 
   -- debugging
   love.graphics.setColor(1, 1, 1)
-  love.graphics.print(ballvx, 400, 400)
+  love.graphics.print(ballvx, 400, 410)
   love.graphics.print(ballvy, 400, 430)
   love.graphics.print(math.sqrt(ballvx ^ 2 + ballvy ^ 2), 400, 450)
   love.graphics.print(math.deg(paddle_rotation), 400, 470)
