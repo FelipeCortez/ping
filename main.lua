@@ -47,16 +47,16 @@ function love.load()
   paddle_len = 100
   paddle_midpoint_x = 300
   paddle_midpoint_y = 300
-  paddle_rotation = math.pi / 4
+  paddle_rotation = 0
 
   ballx = 300
   bally = 100
-  ballr = 10
+  ballr = 7
 
   ballvx = 0
-  ballvy = 0
+  ballvy = -15
 
-  g = 50
+  g = 200
 
   math.randomseed(os.clock()*100000000000)
 end
@@ -107,24 +107,12 @@ end
 
 function love.draw()
   if intersect(paddle_x1, paddle_x2, paddle_y1, paddle_y2, ballx, bally, ballr) then
-    love.graphics.clear(0, 0, 0)
-  else
     love.graphics.clear(0.5, 0, 0)
+  else
+    love.graphics.clear(0, 0, 0)
   end
 
-  for x=1,800,10 do
-    for y=1,800,10 do
-
-      if intersect(paddle_x1, paddle_x2, paddle_y1, paddle_y2, x, y, ballr) then
-        love.graphics.setColor(1, 1, 1)
-      else
-        love.graphics.setColor(1, 0, 0)
-      end
-
-      love.graphics.circle("line", x, y, 3)
-    end
-  end
-
+  love.graphics.setColor(1, 1, 1)
   midpointx = (paddle_x1 + paddle_x2) / 2
   midpointy = (paddle_y1 + paddle_y2) / 2
   love.graphics.circle("line", ballx, bally, ballr)
