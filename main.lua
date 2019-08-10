@@ -23,8 +23,31 @@ function intersect(ax, bx, ay, by, cx, cy, r)
   return false
 end
 
-function reflect(vx, vy, x1, x2, y1, y2)
+function reflect(vx, vy, ax, bx, ay, by)
+  linex = bx - ax
+  liney = by - ay
+  nx = y
+  ny = -x
 
+  magn = math.sqrt(nx ^ 2 + ny ^ 2)
+  nx = y / magn
+  ny = y / magn
+
+  ddotn = (vx * nx) + (vy * ny)
+  ddotn = 2 * ddotn
+  p2x = nx * ddotn
+  p2y = ny * ddotn
+
+  return vx - p2x, vy - p2y
+end
+
+function nnormal(ax, bx, ay, by)
+  x = bx - ax
+  y = by - ay
+
+  magn = math.sqrt(x ^ 2 + y ^ 2)
+
+  return y / magn, -x / magn
 end
 
 function love.load()
@@ -42,7 +65,9 @@ end
 
 function love.update(dt)
   -- bally = bally + (dt * 30)
-  ballx, bally = love.mouse.getPosition()
+  -- ballx, bally = love.mouse.getPosition()
+
+  linex2, liney2 = love.mouse.getPosition()
 end
 
 function love.draw()
@@ -65,7 +90,25 @@ function love.draw()
     end
   end
 
+  vx = 0
+  vy = 30
+
+  midpointx = (linex1 + linex2) / 2
+  midpointy = (liney1 + liney2) / 2
   love.graphics.circle("line", ballx, bally, ballr)
   love.graphics.line(linex1, liney1, linex2, liney2)
+
+  -- normal
+  love.graphics.setColor(0, 0, 0)
+  nx, ny = nnormal(linex1, linex2, liney1, liney2)
+  love.graphics.line(midpointx, midpointy, midpointx + nx * 50, midpointy + ny * 50)
+
+  -- velocity
+  love.graphics.setColor(0, 1, 0)
+  love.graphics.line(midpointx, midpointy, midpointx + vx, midpointy + vy)
+
+  -- reflection
+  -- love.graphics.setColor(0, 0, 1)
+  -- rx, ry = reflect(0, -20, linex1, linex2, liney1, liney2)
 end
 
