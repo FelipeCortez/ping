@@ -44,24 +44,30 @@ function reflect(vx, vy, ax, bx, ay, by)
 end
 
 function love.load()
-  paddle_len = 100
-  paddle_midpoint_x = 300
+  ww, wh, _ = love.window.getMode()
+
+  paddle_len = 50
+  paddle_midpoint_x = 150
   paddle_midpoint_y = 300
   paddle_rotation = 0
 
-  ballx = 300
-  bally = 100
-  ballr = 7
+  ballx = paddle_midpoint_x
+  bally = paddle_midpoint_y - 15
+  ballr = 5
 
   ballvx = 0
-  ballvy = -15
+  ballvy = -100
 
-  g = 200
+  g = 150
 
-  math.randomseed(os.clock()*100000000000)
+  ground_y = 400
+  ground_len = 400
 end
 
 function love.update(dt)
+  paddle_intersect = false
+  ground_intersect = false
+
   kvel = 100
   rvel = 2
   ballvy = ballvy + (g * dt)
@@ -101,22 +107,34 @@ function love.update(dt)
   paddle_y2 = paddle_midpoint_y + (halflen * math.sin(paddle_rotation))
 
   if intersect(paddle_x1, paddle_x2, paddle_y1, paddle_y2, ballx, bally, ballr) then
+    paddle_intersect = true
     ballvx, ballvy = reflect(ballvx, ballvy, paddle_x1, paddle_x2, paddle_y1, paddle_y2)
+  end
+
+  if intersect((ww / 2) - (ground_len / 2), (ww / 2) + (ground_len / 2), ground_y, ground_y, ballx, bally, ballr) then
+    ground_intersect = true
+    ballvx, ballvy = reflect(ballvx, ballvy, (ww / 2) - (ground_len / 2), (ww / 2) + (ground_len / 2), ground_y, ground_y)
   end
 end
 
 function love.draw()
-  if intersect(paddle_x1, paddle_x2, paddle_y1, paddle_y2, ballx, bally, ballr) then
+  if paddle_intersect or ground_intersect then
     love.graphics.clear(0.5, 0, 0)
   else
     love.graphics.clear(0, 0, 0)
   end
 
+  -- paddle
   love.graphics.setColor(1, 1, 1)
   midpointx = (paddle_x1 + paddle_x2) / 2
   midpointy = (paddle_y1 + paddle_y2) / 2
-  love.graphics.circle("line", ballx, bally, ballr)
   love.graphics.line(paddle_x1, paddle_y1, paddle_x2, paddle_y2)
+
+  -- ball
+  love.graphics.circle("line", ballx, bally, ballr)
+
+  -- ground
+  love.graphics.line((ww / 2) - (ground_len / 2), ground_y, (ww / 2) + (ground_len / 2), ground_y)
 
   -- normal
   love.graphics.setColor(0, 0, 0)
