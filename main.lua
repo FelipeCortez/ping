@@ -73,6 +73,10 @@ function love.update(dt)
   ballvy = ballvy + (g * dt)
   dt = 2 * dt
 
+  if love.keyboard.isDown("lshift") then
+    kvel = 150
+  end
+
   if love.keyboard.isDown("left") then
     paddle_midpoint_x = paddle_midpoint_x - (kvel * dt)
   end
