@@ -23,24 +23,6 @@ function intersect(ax, bx, ay, by, cx, cy, r)
   return false
 end
 
-function reflect(vx, vy, ax, bx, ay, by)
-  linex = bx - ax
-  liney = by - ay
-  nx = y
-  ny = -x
-
-  magn = math.sqrt(nx ^ 2 + ny ^ 2)
-  nx = y / magn
-  ny = y / magn
-
-  ddotn = (vx * nx) + (vy * ny)
-  ddotn = 2 * ddotn
-  p2x = nx * ddotn
-  p2y = ny * ddotn
-
-  return vx - p2x, vy - p2y
-end
-
 function nnormal(ax, bx, ay, by)
   x = bx - ax
   y = by - ay
@@ -48,6 +30,17 @@ function nnormal(ax, bx, ay, by)
   magn = math.sqrt(x ^ 2 + y ^ 2)
 
   return y / magn, -x / magn
+end
+
+function reflect(vx, vy, ax, bx, ay, by)
+  nx, ny = nnormal(ax, bx, ay, by)
+
+  ddotn = (vx * nx) + (vy * ny)
+  ddotn = 2 * ddotn
+  p2x = nx * ddotn
+  p2y = ny * ddotn
+
+  return vx - p2x, vy - p2y
 end
 
 function love.load()
@@ -91,7 +84,7 @@ function love.draw()
   end
 
   vx = 0
-  vy = 30
+  vy = 60
 
   midpointx = (linex1 + linex2) / 2
   midpointy = (liney1 + liney2) / 2
@@ -108,7 +101,8 @@ function love.draw()
   love.graphics.line(midpointx, midpointy, midpointx + vx, midpointy + vy)
 
   -- reflection
-  -- love.graphics.setColor(0, 0, 1)
-  -- rx, ry = reflect(0, -20, linex1, linex2, liney1, liney2)
+  rx, ry = reflect(vx, vy, linex1, linex2, liney1, liney2)
+  love.graphics.setColor(0, 0, 1)
+  love.graphics.line(midpointx, midpointy, midpointx + rx, midpointy + ry)
 end
 
