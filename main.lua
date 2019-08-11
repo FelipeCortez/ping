@@ -66,6 +66,8 @@ function love.load()
   ground_y = 400
   ground_len = 400
 
+  net_h = 30
+
   init()
 end
 
@@ -124,14 +126,22 @@ function love.update(dt)
     if intersect(paddle_x1, paddle_x2, paddle_y1, paddle_y2, ballxtemp, ballytemp, ballr) then
       paddle_intersect = true
       ballvx, ballvy = reflect(ballvx, ballvy, paddle_x1, paddle_x2, paddle_y1, paddle_y2)
-      ballvx = ballvx * 0.95
-      ballvy = ballvy * 0.95
+      ballvx = ballvx * 0.90
+      ballvy = ballvy * 0.90
       break
     end
 
     if intersect((ww / 2) - (ground_len / 2), (ww / 2) + (ground_len / 2), ground_y, ground_y, ballxtemp, ballytemp, ballr) then
       ground_intersect = true
       ballvx, ballvy = reflect(ballvx, ballvy, (ww / 2) - (ground_len / 2), (ww / 2) + (ground_len / 2), ground_y, ground_y)
+      ballvx = ballvx * 0.75
+      ballvy = ballvy * 0.75
+      break
+    end
+
+    if intersect((ww / 2), ground_y, (ww / 2), ground_y - net_h, ballxtemp, ballytemp, ballr) then
+      ground_intersect = true
+      ballvx, ballvy = reflect(ballvx, ballvy, (ww / 2), ground_y, (ww / 2), ground_y - net_h)
       ballvx = ballvx * 0.75
       ballvy = ballvy * 0.75
       break
@@ -160,6 +170,9 @@ function love.draw()
 
   -- ground
   love.graphics.line((ww / 2) - (ground_len / 2), ground_y, (ww / 2) + (ground_len / 2), ground_y)
+
+  -- net
+  love.graphics.line((ww / 2), ground_y, (ww / 2), ground_y - net_h)
 
   -- normal
   love.graphics.setColor(0, 0, 0)
