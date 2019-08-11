@@ -110,24 +110,36 @@ function love.update(dt)
     init()
   end
 
-  ballx = ballx + (dt * ballvx)
-  bally = bally + (dt * ballvy)
-
   halflen = (paddle_len / 2)
   paddle_x1 = paddle_midpoint_x - (halflen * math.cos(paddle_rotation))
   paddle_y1 = paddle_midpoint_y - (halflen * math.sin(paddle_rotation))
   paddle_x2 = paddle_midpoint_x + (halflen * math.cos(paddle_rotation))
   paddle_y2 = paddle_midpoint_y + (halflen * math.sin(paddle_rotation))
 
-  if intersect(paddle_x1, paddle_x2, paddle_y1, paddle_y2, ballx, bally, ballr) then
-    paddle_intersect = true
-    ballvx, ballvy = reflect(ballvx, ballvy, paddle_x1, paddle_x2, paddle_y1, paddle_y2)
+  iterations = 15
+  for i=1,iterations do
+    ballxtemp = ballx + (dt * ballvx * i / iterations)
+    ballytemp = bally + (dt * ballvy * i / iterations)
+
+    if intersect(paddle_x1, paddle_x2, paddle_y1, paddle_y2, ballxtemp, ballytemp, ballr) then
+      paddle_intersect = true
+      ballvx, ballvy = reflect(ballvx, ballvy, paddle_x1, paddle_x2, paddle_y1, paddle_y2)
+      ballvx = ballvx * 0.95
+      ballvy = ballvy * 0.95
+      break
+    end
+
+    if intersect((ww / 2) - (ground_len / 2), (ww / 2) + (ground_len / 2), ground_y, ground_y, ballxtemp, ballytemp, ballr) then
+      ground_intersect = true
+      ballvx, ballvy = reflect(ballvx, ballvy, (ww / 2) - (ground_len / 2), (ww / 2) + (ground_len / 2), ground_y, ground_y)
+      ballvx = ballvx * 0.75
+      ballvy = ballvy * 0.75
+      break
+    end
   end
 
-  if intersect((ww / 2) - (ground_len / 2), (ww / 2) + (ground_len / 2), ground_y, ground_y, ballx, bally, ballr) then
-    ground_intersect = true
-    ballvx, ballvy = reflect(ballvx, ballvy, (ww / 2) - (ground_len / 2), (ww / 2) + (ground_len / 2), ground_y, ground_y)
-  end
+  ballx = ballx + (dt * ballvx)
+  bally = bally + (dt * ballvy)
 end
 
 function love.draw()
