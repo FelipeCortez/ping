@@ -52,6 +52,8 @@ function init()
 
   ballvx = 0
   ballvy = 0
+
+  hit = false
 end
 
 function love.load()
@@ -69,6 +71,8 @@ function love.load()
   paddle_r = 40
 
   rvel = 5
+
+  hit_v = 200
 
   init()
 end
@@ -99,19 +103,21 @@ function love.update(dt)
   --   paddle_midpoint_y = paddle_midpoint_y + (kvel * dt)
   -- end
 
-  if love.keyboard.isDown("q") then
+  if love.keyboard.isDown("left") then
     paddle_rotation = paddle_rotation - (rvel * dt)
   end
 
-  if love.keyboard.isDown("e") then
+  if love.keyboard.isDown("right") then
     paddle_rotation = paddle_rotation + (rvel * dt)
   end
 
-  if love.keyboard.isDown("space") then
+  if love.keyboard.isDown("r") then
     init()
   end
 
-  -- ballvy = ballvy + (g * dt)
+  if hit then
+    ballvy = ballvy + (g * dt)
+  end
 
   paddle_midpoint_x = ballx + (paddle_r * math.cos(paddle_rotation))
   paddle_midpoint_y = bally + (paddle_r * math.sin(paddle_rotation))
@@ -188,3 +194,16 @@ function love.draw()
   love.graphics.line((ww / 2), ground_y, (ww / 2), ground_y - net_h)
 end
 
+function love.keypressed(key, scancode, isrepeat)
+  if key == "z" then
+    ballvx = - hit_v * math.cos(paddle_rotation)
+    ballvy = - hit_v * math.sin(paddle_rotation)
+    hit = true
+  end
+
+  if key == "x" then
+    ballvx = - hit_v * 1.25 * math.cos(paddle_rotation)
+    ballvy = - hit_v * 1.25 * math.sin(paddle_rotation)
+    hit = true
+  end
+end
