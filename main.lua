@@ -53,6 +53,8 @@ function init()
   ballvx = 0
   ballvy = 0
 
+  paddle_offset = 0
+
   hit = false
 end
 
@@ -119,8 +121,10 @@ function love.update(dt)
     ballvy = ballvy + (g * dt)
   end
 
-  paddle_midpoint_x = ballx + (paddle_r * math.cos(paddle_rotation))
-  paddle_midpoint_y = bally + (paddle_r * math.sin(paddle_rotation))
+  paddle_offset = paddle_offset * 0.80
+
+  paddle_midpoint_x = ballx + (paddle_r * math.cos(paddle_rotation) * (1 - paddle_offset))
+  paddle_midpoint_y = bally + (paddle_r * math.sin(paddle_rotation) * (1 - paddle_offset))
 
   halflen = (paddle_len / 2)
   paddle_x1 = paddle_midpoint_x - (halflen * math.cos(paddle_rotation + math.pi / 2))
@@ -190,12 +194,14 @@ function love.keypressed(key, scancode, isrepeat)
   if key == "z" then
     ballvx = - hit_v * math.cos(paddle_rotation)
     ballvy = - hit_v * math.sin(paddle_rotation)
+    paddle_offset = 1
     hit = true
   end
 
   if key == "x" then
     ballvx = - hit_v * 1.25 * math.cos(paddle_rotation)
     ballvy = - hit_v * 1.25 * math.sin(paddle_rotation)
+    paddle_offset = 1
     hit = true
   end
 end
