@@ -85,9 +85,11 @@ function love.update(dt)
 
   -- dt = 2 * dt
 
-  -- if love.keyboard.isDown("lshift") then
-  --   kvel = 170
-  -- end
+  if love.keyboard.isDown("lshift") then
+    rvel = 2.5
+  else
+    rvel = 5
+  end
 
   -- if love.keyboard.isDown("left") then
   --   paddle_midpoint_x = paddle_midpoint_x - (kvel * dt)
@@ -121,7 +123,7 @@ function love.update(dt)
     ballvy = ballvy + (g * dt)
   end
 
-  paddle_offset = paddle_offset * 0.80
+  paddle_offset = paddle_offset * 0.85
 
   paddle_midpoint_x = ballx + (paddle_r * math.cos(paddle_rotation) * (1 - paddle_offset))
   paddle_midpoint_y = bally + (paddle_r * math.sin(paddle_rotation) * (1 - paddle_offset))
@@ -194,14 +196,14 @@ function love.keypressed(key, scancode, isrepeat)
   if key == "z" then
     ballvx = - hit_v * math.cos(paddle_rotation)
     ballvy = - hit_v * math.sin(paddle_rotation)
-    paddle_offset = 1
+    paddle_offset = 1.1
     hit = true
   end
 
   if key == "x" then
     ballvx = - hit_v * 1.25 * math.cos(paddle_rotation)
     ballvy = - hit_v * 1.25 * math.sin(paddle_rotation)
-    paddle_offset = 1
+    paddle_offset = 1.2
     hit = true
   end
 end
