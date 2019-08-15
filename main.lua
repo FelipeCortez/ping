@@ -61,9 +61,9 @@ end
 function love.load()
   ww, wh, _ = love.window.getMode()
 
-  paddle_len = 50
+  paddle_len = 25
   ballr = 5
-  g = 150
+  g = 175
 
   ground_y = 400
   ground_len = 400
@@ -83,29 +83,11 @@ function love.update(dt)
   paddle_intersect = false
   ground_intersect = false
 
-  -- dt = 2 * dt
-
   if love.keyboard.isDown("lshift") then
     rvel = 2.5
   else
     rvel = 5
   end
-
-  -- if love.keyboard.isDown("left") then
-  --   paddle_midpoint_x = paddle_midpoint_x - (kvel * dt)
-  -- end
-
-  -- if love.keyboard.isDown("right") then
-  --   paddle_midpoint_x = paddle_midpoint_x + (kvel * dt)
-  -- end
-
-  -- if love.keyboard.isDown("up") then
-  --   paddle_midpoint_y = paddle_midpoint_y - (kvel * dt)
-  -- end
-
-  -- if love.keyboard.isDown("down") then
-  --   paddle_midpoint_y = paddle_midpoint_y + (kvel * dt)
-  -- end
 
   if love.keyboard.isDown("left") then
     paddle_rotation = paddle_rotation - (rvel * dt)
@@ -203,6 +185,14 @@ function love.keypressed(key, scancode, isrepeat)
   if key == "x" then
     ballvx = - hit_v * 1.25 * math.cos(paddle_rotation)
     ballvy = - hit_v * 1.25 * math.sin(paddle_rotation)
+    paddle_offset = 1.2
+    hit = true
+  end
+
+  if key == "c" then
+    ballvxr, ballvyr = reflect(ballvx, ballvy, paddle_x1, paddle_x2, paddle_y1, paddle_y2)
+    ballvx = (- hit_v * math.cos(paddle_rotation)) + ballvxr * 0.3
+    ballvy = (- hit_v * math.sin(paddle_rotation)) + ballvyr * 0.3
     paddle_offset = 1.2
     hit = true
   end
