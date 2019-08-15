@@ -138,8 +138,13 @@ function love.update(dt)
     end
   end
 
+  prev_ballx = ballx
   ballx = ballx + (dt * ballvx)
   bally = bally + (dt * ballvy)
+
+  if (prev_ballx < (ww / 2) and ballx >= (ww / 2)) or (prev_ballx > (ww / 2) and ballx <= (ww / 2)) then
+    paddle_rotation = math.pi - paddle_rotation
+  end
 
   paddle_midpoint_x = ballx + (paddle_r * math.cos(paddle_rotation))
   paddle_midpoint_y = bally + (paddle_r * math.sin(paddle_rotation))
