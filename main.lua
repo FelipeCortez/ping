@@ -55,6 +55,7 @@ function init()
 
   paddle_offset = 0
 
+  can_hit = true
   hit = false
 end
 
@@ -63,12 +64,12 @@ function love.load()
 
   paddle_len = 25
   ballr = 5
-  g = 175
+  g = 400
 
   ground_y = 400
   ground_len = 400
 
-  net_h = 45
+  net_h = 30
 
   paddle_r = 40
 
@@ -148,6 +149,12 @@ function love.update(dt)
 
   paddle_midpoint_x = ballx + (paddle_r * math.cos(paddle_rotation))
   paddle_midpoint_y = bally + (paddle_r * math.sin(paddle_rotation))
+
+  if paddle_midpoint_x < (ww / 2) - (ground_len / 2) or paddle_midpoint_x > (ww / 2) + (ground_len / 2) then
+    can_hit = true
+  else
+    can_hit = false
+  end
 end
 
 function love.draw()
@@ -166,10 +173,15 @@ function love.draw()
   end
 
   -- paddle
-  love.graphics.setColor(1, 1, 1)
+  if can_hit then
+    love.graphics.setColor(1, 1, 1)
+  else
+    love.graphics.setColor(0.5, 0.5, 0.5)
+  end
   love.graphics.line(paddle_x1, paddle_y1, paddle_x2, paddle_y2)
 
   -- ball
+  love.graphics.setColor(1, 1, 1)
   love.graphics.circle("line", ballx, bally, ballr)
 
   -- ground
@@ -180,25 +192,34 @@ function love.draw()
 end
 
 function love.keypressed(key, scancode, isrepeat)
-  if key == "z" then
-    ballvx = - hit_v * math.cos(paddle_rotation)
-    ballvy = - hit_v * math.sin(paddle_rotation)
-    paddle_offset = 1.1
-    hit = true
-  end
+  if can_hit then
+    if key == "a" then
+      ballvx = - hit_v * 2 * math.cos(paddle_rotation)
+      ballvy = - hit_v * 2 * math.sin(paddle_rotation)
+      paddle_offset = 2
+      hit = true
+    end
 
-  if key == "x" then
-    ballvx = - hit_v * 1.25 * math.cos(paddle_rotation)
-    ballvy = - hit_v * 1.25 * math.sin(paddle_rotation)
-    paddle_offset = 1.2
-    hit = true
-  end
+    if key == "z" then
+      ballvx = - hit_v * math.cos(paddle_rotation)
+      ballvy = - hit_v * math.sin(paddle_rotation)
+      paddle_offset = 1.1
+      hit = true
+    end
 
-  if key == "c" then
-    ballvxr, ballvyr = reflect(ballvx, ballvy, paddle_x1, paddle_x2, paddle_y1, paddle_y2)
-    ballvx = (- hit_v * math.cos(paddle_rotation)) + ballvxr * 0.3
-    ballvy = (- hit_v * math.sin(paddle_rotation)) + ballvyr * 0.3
-    paddle_offset = 1.2
-    hit = true
+    if key == "x" then
+      ballvx = - hit_v * 1.25 * math.cos(paddle_rotation)
+      ballvy = - hit_v * 1.25 * math.sin(paddle_rotation)
+      paddle_offset = 1.2
+      hit = true
+    end
+
+    if key == "c" then
+      ballvxr, ballvyr = reflect(ballvx, ballvy, paddle_x1, paddle_x2, paddle_y1, paddle_y2)
+      ballvx = (- hit_v * math.cos(paddle_rotation)) + ballvxr * 0.3
+      ballvy = (- hit_v * math.sin(paddle_rotation)) + ballvyr * 0.3
+      paddle_offset = 1.2
+      hit = true
+    end
   end
 end
