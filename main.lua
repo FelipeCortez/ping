@@ -150,11 +150,11 @@ function love.update(dt)
   paddle_midpoint_x = ballx + (paddle_r * math.cos(paddle_rotation))
   paddle_midpoint_y = bally + (paddle_r * math.sin(paddle_rotation))
 
-  if paddle_midpoint_x < (ww / 2) - (ground_len / 2) or paddle_midpoint_x > (ww / 2) + (ground_len / 2) then
-    can_hit = true
-  else
-    can_hit = false
-  end
+  -- if paddle_midpoint_x < (ww / 2) - (ground_len / 2) or paddle_midpoint_x > (ww / 2) + (ground_len / 2) then
+  --   can_hit = true
+  -- else
+  --   can_hit = false
+  -- end
 end
 
 function love.draw()
