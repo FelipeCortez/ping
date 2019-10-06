@@ -158,11 +158,7 @@ function love.update(dt)
 end
 
 function love.draw()
-  if paddle_intersect or ground_intersect then
-    love.graphics.clear(0.5, 0, 0)
-  else
-    love.graphics.clear(0, 0, 0)
-  end
+  love.graphics.clear(0, 0, 0)
 
   -- arc
   love.graphics.setColor(0.3, 0.3, 0.3)
