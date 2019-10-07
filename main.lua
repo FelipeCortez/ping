@@ -189,28 +189,7 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
   if can_hit then
-    if key == "a" then
-      ballvx = - hit_v * 2 * math.cos(paddle_rotation)
-      ballvy = - hit_v * 2 * math.sin(paddle_rotation)
-      paddle_offset = 2
-      hit = true
-    end
-
     if key == "z" then
-      ballvx = - hit_v * math.cos(paddle_rotation)
-      ballvy = - hit_v * math.sin(paddle_rotation)
-      paddle_offset = 1.1
-      hit = true
-    end
-
-    if key == "x" then
-      ballvx = - hit_v * 1.25 * math.cos(paddle_rotation)
-      ballvy = - hit_v * 1.25 * math.sin(paddle_rotation)
-      paddle_offset = 1.2
-      hit = true
-    end
-
-    if key == "c" then
       ballvxr, ballvyr = reflect(ballvx, ballvy, paddle_x1, paddle_x2, paddle_y1, paddle_y2)
       ballvx = (- hit_v * math.cos(paddle_rotation)) + ballvxr * 0.3
       ballvy = (- hit_v * math.sin(paddle_rotation)) + ballvyr * 0.3
